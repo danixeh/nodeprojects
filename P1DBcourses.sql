@@ -1,3 +1,82 @@
+-- DB diagram
+
+
+table Users {
+  id uuid [pk]
+  name varchar [not null]
+  email varchar [not null, unique]
+  password varchar [not null]
+  age numeric [not null]
+  is_active bool [default:true]
+  Rol_id uuid [not null]
+}
+
+table Courses {
+  id uuid [pk]
+  title varchar [not null]
+  description varchar [not null]
+  Level varchar [not null]
+  Teacher name [not null]
+  is_active bool [default:true]
+}
+
+table courses_users {
+    id uuid [pk]
+    user_id uuid
+    course_id uuid [not null]
+}
+
+table Course_Video {
+  id uuid [pk]
+  title varchar [not null]
+  URL URL [not null]
+  Video_description varchar [not null, unique]
+  courses_id uuid [not null]
+  category_id uuid [not null]
+  is_completed bool [default: false]
+  completed integer
+
+}
+
+table Categories {
+  id uuid [pk]
+  name varchar [not null]
+}
+
+table courses_Categories {
+  id uuid [pk]
+  course_id uuid
+  category_id uuid
+}
+
+
+table Roles {
+  id uuid [pk]
+  name varchar
+}
+
+// 1 : 1
+// 1 : Muchos
+// Muchos : Muchos
+
+
+Ref: "Users"."id" < "courses_users"."user_id"
+
+Ref: "Courses"."id" < "courses_users"."course_id"
+
+
+
+Ref: "Courses"."id" < "Course_Video"."courses_id"
+
+Ref: "Courses"."id" < "courses_Categories"."course_id"
+
+Ref: "Categories"."id" < "courses_Categories"."category_id"
+
+Ref: "Roles"."id" < "Users"."Rol_id"
+
+
+-- SQL 
+
 CREATE TABLE "users" (
   "id" uuid PRIMARY KEY,
   "name" varchar NOT NULL,
@@ -62,7 +141,7 @@ ALTER TABLE "courses_categories" ADD FOREIGN KEY ("categories_id") REFERENCES "c
 
 ALTER TABLE "users" ADD FOREIGN KEY ("roles_id") REFERENCES "roles" ("id");
 
-
+-- building data -- 2 registers by each one
 
 insert into roles (
   id,
