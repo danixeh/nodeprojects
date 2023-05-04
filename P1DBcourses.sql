@@ -1,4 +1,3 @@
--- DB diagram
 
 
 table Users {
